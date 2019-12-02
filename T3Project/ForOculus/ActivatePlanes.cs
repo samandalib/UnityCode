@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ActivatePlanes : MonoBehaviour{
 
+  public GameObject PhoneBoot1;
+  public GameObject PhoneBoot2;
+
+  public GameObject BlackBox;
+
   public GameObject Codeplanes;
   public GameObject CubeTrigger;
   public GameObject LightHole;
@@ -11,7 +16,12 @@ public class ActivatePlanes : MonoBehaviour{
   public GameObject PresentTimeObjects;
   public GameObject PastTimeObjects;
 
+
   public AudioSource source;
+
+  public AudioClip PersonOnPhone;
+  public AudioClip PickUpSound;
+  public AudioClip BusyTone;
 
   public AudioClip HoleOpenSound;
   public AudioClip electricity;
@@ -21,6 +31,11 @@ public class ActivatePlanes : MonoBehaviour{
   [SerializeField] private Animator TransitionAnimator;
 
   private void Start(){
+    PhoneBoot1.SetActive(true);
+    PhoneBoot2.SetActive(false);
+
+    BlackBox.SetActive(false);
+
     PresentTimeObjects.SetActive(true);
     PastTimeObjects.SetActive(false);
     LightHole.SetActive(false);
@@ -31,6 +46,25 @@ public class ActivatePlanes : MonoBehaviour{
   private IEnumerator WaitSomeTime(){
 
     Debug.Log("IEnumerator Started");
+    BlackBox.SetActive(true);
+    Debug.Log("Before PickUp");
+    PlayPhonePickUpSound();
+    PhoneBoot2.SetActive(true);
+    PhoneBoot1.SetActive(false);
+
+    yield return new WaitForSeconds(2);
+    Debug.Log("Before VoiceOnPhone");
+    PlayPersonOnPhone();
+    yield return new WaitForSeconds(10);
+    Debug.Log("Before BusyTone");
+    PlayBusyTone();
+    yield return new WaitForSeconds(3);
+
+
+    BlackBox.SetActive(false);
+
+
+
 
     PlayElectricitySound();
 
@@ -82,6 +116,21 @@ public class ActivatePlanes : MonoBehaviour{
 
   private void PlayOldSong(){//Ambient Music for the old buidling
     source.clip = EdithPiaf;
+    source.Play();
+  }
+
+  private void PlayPhonePickUpSound(){
+    source.clip = PickUpSound;
+    source.Play();
+  }
+
+  private void PlayPersonOnPhone(){
+    source.clip = PersonOnPhone;
+    source.Play();
+  }
+
+  private void PlayBusyTone(){
+    source.clip = BusyTone;
     source.Play();
   }
 
